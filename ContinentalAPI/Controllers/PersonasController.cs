@@ -40,9 +40,24 @@ namespace ContinentalAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] Persona persona)
         {
-            // Validar correo electrónico y fecha de nacimiento
             // Validar duplicidad de personas por nro de documento
+            var existeNroDocumento = await _context.Personas.AnyAsync(p => p.NroDocumento == persona.NroDocumento);
+            if (existeNroDocumento)
+            {
+                ModelState.AddModelError("NroDocumento", "Ya existe una persona con el mismo número de documento.");
+                return BadRequest(ModelState);
+            }
 
+            // Validar duplicidad de personas por correo electrónico
+            if (!string.IsNullOrEmpty(persona.CorreoElectronico))
+            {
+                var existeCorreoElectronico = await _context.Personas.AnyAsync(p => p.CorreoElectronico == persona.CorreoElectronico);
+                if (existeCorreoElectronico)
+                {
+                    ModelState.AddModelError("CorreoElectronico", "Ya existe una persona con el mismo correo electrónico.");
+                    return BadRequest(ModelState);
+                }
+            }
             _context.Personas.Add(persona);
             await _context.SaveChangesAsync();
             return Ok();

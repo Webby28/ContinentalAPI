@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// Archivo: Data/PersonaContext.cs
+using Microsoft.EntityFrameworkCore;
 using ContinentalAPI.Models;
 
 namespace ContinentalAPI.Data
