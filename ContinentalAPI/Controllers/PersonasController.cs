@@ -25,6 +25,18 @@ namespace ContinentalAPI.Controllers
             return await _context.Personas.ToListAsync();
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Persona>> Get(int id)
+        {
+            var persona = await _context.Personas.FindAsync(id);
+            if (persona == null)
+            {
+                return NotFound();
+            }
+
+            return persona;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] Persona persona)
         {
